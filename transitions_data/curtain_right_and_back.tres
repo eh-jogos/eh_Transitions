@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://addons/eh_jogos.transitions/custom_resources/eh_TransitionData.gd" type="Script" id=1]
+[ext_resource path="res://addons/eh_jogos.transitions/textures/linear_horizontal_grayscale.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+color = Color( 0, 0, 0, 1 )
+duration = 0.5
+mask = ExtResource( 2 )
+smooth_size = 0.385
+transition_in = "black_to_white"
+transition_out = "white_to_black"
