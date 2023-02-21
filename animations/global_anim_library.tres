@@ -1,0 +1,24 @@
+[gd_resource type="AnimationLibrary" load_steps=10 format=3 uid="uid://c005a2dgm7gkx"]
+
+[ext_resource type="Animation" uid="uid://cl12cve1wxbif" path="res://addons/eh_jogos.transitions/animations/global_anim_library/RESET.tres" id="1_3fqr6"]
+[ext_resource type="Animation" uid="uid://bmfrtksci8k5" path="res://addons/eh_jogos.transitions/animations/global_anim_library/black_to_white_in.tres" id="2_kexfb"]
+[ext_resource type="Animation" uid="uid://ckm51n1cdbkg8" path="res://addons/eh_jogos.transitions/animations/global_anim_library/black_to_white_out.tres" id="3_iadqg"]
+[ext_resource type="Animation" uid="uid://dc4yuwjwrcg8q" path="res://addons/eh_jogos.transitions/animations/global_anim_library/cut_from_color.tres" id="4_jabv5"]
+[ext_resource type="Animation" uid="uid://fqkbmr2v1ubi" path="res://addons/eh_jogos.transitions/animations/global_anim_library/cut_to_color.tres" id="5_joc8x"]
+[ext_resource type="Animation" uid="uid://d3s75bp8iak4e" path="res://addons/eh_jogos.transitions/animations/global_anim_library/fade_in.tres" id="6_u8kjh"]
+[ext_resource type="Animation" uid="uid://cfm325wd8xbgl" path="res://addons/eh_jogos.transitions/animations/global_anim_library/fade_out.tres" id="7_28qk8"]
+[ext_resource type="Animation" uid="uid://o2heta32qojo" path="res://addons/eh_jogos.transitions/animations/global_anim_library/white_to_black_in.tres" id="8_7su64"]
+[ext_resource type="Animation" uid="uid://5bt5uog8681t" path="res://addons/eh_jogos.transitions/animations/global_anim_library/white_to_black_out.tres" id="9_hkacu"]
+
+[resource]
+_data = {
+"RESET": ExtResource("1_3fqr6"),
+"black_to_white_in": ExtResource("2_kexfb"),
+"black_to_white_out": ExtResource("3_iadqg"),
+"cut_from_color": ExtResource("4_jabv5"),
+"cut_to_color": ExtResource("5_joc8x"),
+"fade_in": ExtResource("6_u8kjh"),
+"fade_out": ExtResource("7_28qk8"),
+"white_to_black_in": ExtResource("8_7su64"),
+"white_to_black_out": ExtResource("9_hkacu")
+}
