@@ -19,10 +19,11 @@ class_name eh_SceneChanger
 
 #--- public variables - order: export > normal var > onready --------------------------------------
 
+@export var transition_data: eh_TransitionData = null
+
 #--- private variables - order: export > normal var > onready -------------------------------------
 
-export(String, FILE, "*.tscn") var _next_scene_path: String = ""
-export(Resource) var transition_data = null
+@export var _next_scene_path: String = "" # (String, FILE, "*.tscn")
 
 ### -----------------------------------------------------------------------------------------------
 
@@ -31,9 +32,9 @@ export(Resource) var transition_data = null
 
 func _ready():
 	var parent = get_parent()
-	yield(parent, "ready")
+	await parent.ready
 	if parent is BaseButton:
-		parent.connect("pressed", self, "_on_owner_pressed")
+		parent.connect("pressed",Callable(self,"_on_owner_pressed"))
 
 ### -----------------------------------------------------------------------------------------------
 
@@ -45,27 +46,21 @@ func get_next_path() -> String:
 
 
 func transition_to_next_scene() -> void:
-	if transition_data != null and transition_data is eh_TransitionData:
-		eh_Transitions.change_transition_data_oneshot(transition_data)
-	
-	eh_Transitions.play_transition_in()
-	yield(eh_Transitions, "transition_mid_point_reached")
+	eh_Transitions.play_transition_in(transition_data)
+	await eh_Transitions.transition_mid_point_reached
 	
 	_load_next_scene_from_path(_next_scene_path)
 	
-	eh_Transitions.play_transition_out()
+	eh_Transitions.play_transition_out(transition_data)
 
 
 func transition_to(packed_scene: PackedScene) -> void:
-	if transition_data != null and transition_data is eh_TransitionData:
-		eh_Transitions.change_transition_data_oneshot(transition_data)
-	
-	eh_Transitions.play_transition_in()
-	yield(eh_Transitions, "transition_mid_point_reached")
+	eh_Transitions.play_transition_in(transition_data)
+	await eh_Transitions.transition_mid_point_reached
 	
 	_change_to_loaded_packed_scene(packed_scene)
 	
-	eh_Transitions.play_transition_out()
+	eh_Transitions.play_transition_out(transition_data)
 
 ### -----------------------------------------------------------------------------------------------
 
@@ -73,11 +68,11 @@ func transition_to(packed_scene: PackedScene) -> void:
 ### Private Methods -------------------------------------------------------------------------------
 
 func _load_next_scene_from_path(path: String) -> void:
-	get_tree().change_scene(path)
+	get_tree().change_scene_to_file(path)
 
 
 func _change_to_loaded_packed_scene(packed_scene: PackedScene) -> void:
-	get_tree().change_scene_to(packed_scene)
+	get_tree().change_scene_to_packed(packed_scene)
 
 
 func _on_owner_pressed() -> void:

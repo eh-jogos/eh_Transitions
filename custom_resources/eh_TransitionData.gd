@@ -23,21 +23,22 @@ class_name eh_TransitionData
 
 #--- enums ----------------------------------------------------------------------------------------
 
-#--- constants ------------------------------------------------------------------------------------
+enum TransitionDirection {
+	BLACK_TO_WHITE,
+	WHITE_TO_BLACK,
+}
 
-const BLACK_TO_WHITE = "black_to_white"
-const WHITE_TO_BLACK = "white_to_black"
+#--- constants ------------------------------------------------------------------------------------
 
 #--- public variables - order: export > normal var > onready --------------------------------------
 
-export var color: Color = Color.black
-export var duration: float = 0.0 setget _set_duration, _get_duration
-export var mask: Texture = null
-export(float, 0.0, 0.5) var smooth_size: float = 0.385
-export(String, "black_to_white", "white_to_black" ) \
-		var transition_in: = BLACK_TO_WHITE setget , _get_transition_in
-export(String, "black_to_white", "white_to_black") \
-		var transition_out: = BLACK_TO_WHITE setget , _get_transition_out
+@export var color: Color = Color.BLACK
+@export var duration: float = 0.0: set=_set_duration
+@export var mask: Texture = null
+@export_range(0.0, 0.5, 0.001) var smooth_size: float = 0.385
+
+@export var transition_in := TransitionDirection.BLACK_TO_WHITE
+@export var transition_out := TransitionDirection.BLACK_TO_WHITE
 
 #--- private variables - order: export > normal var > onready -------------------------------------
 
@@ -51,6 +52,37 @@ export(String, "black_to_white", "white_to_black") \
 
 ### Public Methods --------------------------------------------------------------------------------
 
+func get_transition_in_animation_name() -> String:
+	var value := ""
+	
+	match transition_in:
+		TransitionDirection.BLACK_TO_WHITE:
+			value = "black_to_white_in"
+		TransitionDirection.WHITE_TO_BLACK:
+			value = "white_to_black_in"
+		_:
+			push_error("Unimplemented TransitionDirection: %s"%[
+					TransitionDirection.keys()[transition_in]
+			])
+	
+	return value
+
+
+func get_transition_out_animation_name() -> String:
+	var value := ""
+	
+	match transition_out:
+		TransitionDirection.BLACK_TO_WHITE:
+			value = "black_to_white_out"
+		TransitionDirection.WHITE_TO_BLACK:
+			value = "white_to_black_out"
+		_:
+			push_error("Unimplemented TransitionDirection: %s"%[
+					TransitionDirection.keys()[transition_out]
+			])
+	
+	return value
+
 ### -----------------------------------------------------------------------------------------------
 
 
@@ -58,33 +90,5 @@ export(String, "black_to_white", "white_to_black") \
 
 func _set_duration(value: float) -> void:
 	duration = max(0, value)
-
-
-func _get_duration() -> float:
-	return duration
-
-
-func _get_transition_in() -> String:
-	var to_return: String = ""
-	if transition_in == "black_to_white":
-		to_return = "transition_in"
-	elif transition_in == "white_to_black":
-		to_return = "reversed_in"
-	else:
-		assert(false, "unindentified type os transition: %s"%[transition_in])
-	
-	return to_return
-
-
-func _get_transition_out() -> String:
-	var to_return: String = ""
-	if transition_out == "black_to_white":
-		to_return = "transition_out"
-	elif transition_out == "white_to_black":
-		to_return = "reversed_out"
-	else:
-		assert(false, "unindentified type os transition: %s"%[transition_out])
-	
-	return to_return
 
 ### -----------------------------------------------------------------------------------------------
