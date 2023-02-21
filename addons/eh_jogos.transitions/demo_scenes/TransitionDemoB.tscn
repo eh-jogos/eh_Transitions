@@ -1,45 +1,49 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://ulq0a7b2t87w"]
 
-[ext_resource path="res://addons/eh_jogos.transitions/transitions_data/sweep_left.tres" type="Resource" id=1]
-[ext_resource path="res://addons/eh_jogos.transitions/custom_nodes/eh_SceneChanger.gd" type="Script" id=2]
+[ext_resource type="Resource" uid="uid://bl8flrysvl7g" path="res://addons/eh_jogos.transitions/transitions_data/sweep_left.tres" id="1"]
+[ext_resource type="Script" path="res://addons/eh_jogos.transitions/custom_nodes/eh_SceneChanger.gd" id="2"]
 
 [node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1.0
-margin_top = 1.0
-margin_right = 1.0
-margin_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -25.5
-margin_top = 32.0
-margin_right = 25.5
-margin_bottom = 46.0
-rect_scale = Vector2( 3, 3 )
-rect_pivot_offset = Vector2( 25, 0 )
+offset_left = -30.5
+offset_right = 30.5
+offset_bottom = 26.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 96
 text = "Scene B"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -53.0
-margin_top = -10.0
-margin_right = 53.0
-margin_bottom = 10.0
+offset_left = -168.0
+offset_top = -37.5
+offset_right = 168.0
+offset_bottom = 37.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 48
 text = "Go to Scene A "
 
 [node name="eh_SceneChanger" type="Node" parent="Button"]
-script = ExtResource( 2 )
-_next_scene_path = "res://addons/eh_jogos.transitions/demo_scenes/TransitionDemoA.tscn"
-transition_data = ExtResource( 1 )
+script = ExtResource("2")
+transition_data = ExtResource("1")
+next_scene_path = "res://addons/eh_jogos.transitions/demo_scenes/TransitionDemoA.tscn"

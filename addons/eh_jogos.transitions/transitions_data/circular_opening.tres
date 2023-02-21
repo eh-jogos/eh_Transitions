@@ -1,13 +1,13 @@
-[gd_resource type="Resource" load_steps=3 format=2]
+[gd_resource type="Resource" script_class="eh_TransitionData" load_steps=3 format=3 uid="uid://bhnrogfbnssoy"]
 
-[ext_resource path="res://addons/eh_jogos.transitions/custom_resources/eh_TransitionData.gd" type="Script" id=1]
-[ext_resource path="res://addons/eh_jogos.transitions/textures/circular_grayscale.png" type="Texture" id=2]
+[ext_resource type="Script" path="res://addons/eh_jogos.transitions/custom_resources/eh_TransitionData.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://dn700mbpwd3cc" path="res://addons/eh_jogos.transitions/textures/circular_grayscale.png" id="2"]
 
 [resource]
-script = ExtResource( 1 )
-color = Color( 0, 0, 0, 1 )
+script = ExtResource("1")
+color = Color(0, 0, 0, 1)
 duration = 0.5
-mask = ExtResource( 2 )
+mask = ExtResource("2")
 smooth_size = 0.0
-transition_in = "white_to_black"
-transition_out = "black_to_white"
+transition_in = 1
+transition_out = 1
