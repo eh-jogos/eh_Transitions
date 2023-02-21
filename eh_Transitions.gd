@@ -159,12 +159,42 @@ func is_on_any_point_of_transition() -> bool:
 		or is_transitioning_out()
 	)
 
+
+func transition_to_path(p_path: String, p_transition_data: eh_TransitionData = null) -> void:
+	if p_transition_data != null:
+		_change_transition_data_oneshot(p_transition_data)
+	
+	eh_Transitions.play_transition_in()
+	await eh_Transitions.transition_mid_point_reached
+	
+	_load_scene_from_path(p_path)
+	
+	eh_Transitions.play_transition_out()
+
+
+func transition_to_packed(
+		packed_scene: PackedScene, p_transition_data: eh_TransitionData = null
+) -> void:
+	if p_transition_data != null:
+		_change_transition_data_oneshot(p_transition_data)
+	
+	eh_Transitions.play_transition_in()
+	await eh_Transitions.transition_mid_point_reached
+	
+	get_tree().change_scene_to_packed(packed_scene)
+	
+	eh_Transitions.play_transition_out()
+
+
 ### -----------------------------------------------------------------------------------------------
 
 
 ### Private Methods -------------------------------------------------------------------------------
 
 func _change_transition_data_oneshot(data: eh_TransitionData) -> void:
+	if data == transition_data:
+		return
+	
 	var backup_transition: eh_TransitionData = transition_data
 	transition_data = data
 	await transition_finished
@@ -203,6 +233,10 @@ func _play_out_animation(animation: String, color: Color, duration: float) -> vo
 	await _animator.animation_finished
 	set_process_input(false)
 	transition_finished.emit()
+
+
+func _load_scene_from_path(path: String) -> void:
+	get_tree().change_scene_to_file(path)
 
 
 func _set_transition_data(data : eh_TransitionData) -> void:
