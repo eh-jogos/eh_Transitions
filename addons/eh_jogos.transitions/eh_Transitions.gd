@@ -42,6 +42,9 @@ signal transition_finished
 #--- public variables - order: export > normal var > onready --------------------------------------
 
 export(Resource) var transition_data : Resource = null setget _set_transition_data, _get_transition_data
+export var should_block_all_input: = true
+
+var is_on_mid_point: = false 
 
 #--- private variables - order: export > normal var > onready -------------------------------------
 
@@ -57,11 +60,17 @@ onready var _shader: ShaderMaterial = _color_panel.material
 ### Built in Engine Methods -----------------------------------------------------------------------
 
 func _ready():
+	set_process_input(false)
 	set_process_unhandled_input(false)
 	
 	if get_tree().current_scene == self:
 		print(get_tree().current_scene.name)
 		set_process_unhandled_input(true)
+
+
+func _input(event: InputEvent) -> void:
+	if should_block_all_input:
+		get_tree().set_input_as_handled()
 
 
 func _unhandled_input(event):
@@ -147,15 +156,27 @@ func is_transitioning_out() -> bool:
 	)
 	return _animator.is_playing() and is_fade_out
 
+
+func is_on_any_point_of_transition() -> bool:
+	return (
+		is_on_mid_point
+		or is_transitioning_in()
+		or is_transitioning_out()
+	)
+
 ### -----------------------------------------------------------------------------------------------
 
 
 ### Private Methods -------------------------------------------------------------------------------
 
 func _play_in_animation(animation : String, color: Color, duration: float) -> void:
-	if _animator.is_playing():
+	if _animator.is_playing() and not _animator.assigned_animation == "base":
 		_raise_multiple_transition_error()
 		return
+	
+	set_process_input(true)
+	
+	is_on_mid_point = false
 	
 	_color_panel.color = color
 	_set_playback_speed(duration)
@@ -165,6 +186,7 @@ func _play_in_animation(animation : String, color: Color, duration: float) -> vo
 	_animator.play(animation)
 	
 	yield(_animator, "animation_finished")
+	is_on_mid_point = true
 	emit_signal("transition_mid_point_reached")
 
 
@@ -173,12 +195,15 @@ func _play_out_animation(animation : String, color: Color, duration: float) -> v
 		_raise_multiple_transition_error()
 		return
 	
+	
 	_color_panel.color = color
 	_set_playback_speed(duration)
 	
 	_animator.play(animation)
+	is_on_mid_point = false
 	
-	yield(_animator, "animation_finished")
+	var anim_name = yield(_animator, "animation_finished")
+	set_process_input(false)
 	emit_signal("transition_finished")
 
 
