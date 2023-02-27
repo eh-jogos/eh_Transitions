@@ -86,6 +86,7 @@ func play_transition_in(p_transition_data: eh_TransitionData = null) -> void:
 	
 	var animation := transition_data.get_transition_in_animation_name()
 	_play_in_animation(animation, transition_data.color, transition_data.duration)
+	await transition_mid_point_reached
 
 
 func play_transition_out(p_transition_data: eh_TransitionData = null) -> void:
@@ -94,33 +95,30 @@ func play_transition_out(p_transition_data: eh_TransitionData = null) -> void:
 	
 	var animation := transition_data.get_transition_out_animation_name()
 	_play_out_animation(animation, transition_data.color, transition_data.duration)
+	await transition_finished
 
 
 func play_transition_full(p_transition_data: eh_TransitionData = null) -> void:
 	if p_transition_data != null:
 		_change_transition_data_oneshot(p_transition_data)
 	
-	play_transition_in()
-	
-	await transition_mid_point_reached
-	
-	play_transition_out()
+	await play_transition_in()
+	await play_transition_out()
 
 
 func play_fade_in(color: Color = Color.BLACK, duration: float = 0.5) -> void:
 	_play_in_animation("fade_in", color, duration)
+	await transition_mid_point_reached
 
 
 func play_fade_out(color: Color = Color.BLACK, duration: float = 0.5) -> void:
 	_play_out_animation("fade_out", color, duration)
+	await transition_finished
 
 
 func play_fade_transition(color: Color = Color.BLACK, duration: float = 0.5) -> void:
-	play_fade_in(color, duration)
-	
-	await transition_mid_point_reached
-	
-	play_fade_out(color, duration)
+	await play_fade_in(color, duration)
+	await play_fade_out(color, duration)
 
 
 func cut_to_color(color := Color.BLACK) -> void:
@@ -164,12 +162,11 @@ func transition_to_path(p_path: String, p_transition_data: eh_TransitionData = n
 	if p_transition_data != null:
 		_change_transition_data_oneshot(p_transition_data)
 	
-	eh_Transitions.play_transition_in()
-	await eh_Transitions.transition_mid_point_reached
+	await play_transition_in()
 	
 	_load_scene_from_path(p_path)
 	
-	eh_Transitions.play_transition_out()
+	await play_transition_out()
 
 
 func transition_to_packed(
@@ -178,12 +175,11 @@ func transition_to_packed(
 	if p_transition_data != null:
 		_change_transition_data_oneshot(p_transition_data)
 	
-	eh_Transitions.play_transition_in()
-	await eh_Transitions.transition_mid_point_reached
+	await play_transition_in()
 	
 	get_tree().change_scene_to_packed(packed_scene)
 	
-	eh_Transitions.play_transition_out()
+	await play_transition_out()
 
 
 ### -----------------------------------------------------------------------------------------------

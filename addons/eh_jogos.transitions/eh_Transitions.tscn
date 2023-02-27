@@ -17,7 +17,7 @@ shader_parameter/smooth_size = 0.0
 shader_parameter/mask = SubResource("ViewportTexture_b437l")
 
 [node name="TransitionLayer" type="CanvasLayer"]
-layer = 128
+layer = 120
 script = ExtResource("2")
 transition_data = ExtResource("2_pgovs")
 
