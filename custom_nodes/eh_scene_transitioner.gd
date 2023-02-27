@@ -1,8 +1,8 @@
 @tool
+class_name eh_SceneTransitioner
 extends Node
-class_name eh_SceneChanger
 
-# Scene Changer custom node to be used as a helper in conjuction with eh_Transitions
+# Node to help automate transition to other scenes when pressing a button.
 #
 # Just instance this node in your scene, and set the path to the next scene in the
 # exported variable in the editor. Then either call `transition_to_next_scene()` from
