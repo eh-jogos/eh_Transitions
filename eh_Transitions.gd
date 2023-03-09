@@ -60,7 +60,6 @@ func _ready():
 	set_process_unhandled_input(false)
 	
 	if get_tree().current_scene == self:
-		print(get_tree().current_scene.name)
 		set_process_unhandled_input(true)
 
 
