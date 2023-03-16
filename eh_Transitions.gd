@@ -121,14 +121,19 @@ func play_fade_transition(color: Color = Color.BLACK, duration: float = 0.5) -> 
 
 
 func cut_to_color(color := Color.BLACK) -> void:
+	transition_started.emit()
 	_color_panel.color = color
 	_animator.play("cut_to_color")
+	is_on_mid_point = true
 	await _animator.animation_finished
+	transition_mid_point_reached.emit()
 
 
 func cut_from_color() -> void:
+	is_on_mid_point = false
 	_animator.play("cut_from_color")
 	await _animator.animation_finished
+	transition_finished.emit()
 
 
 func is_transitioning_in() -> bool:
