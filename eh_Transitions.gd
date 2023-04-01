@@ -63,7 +63,7 @@ func _ready():
 		set_process_unhandled_input(true)
 
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if should_block_all_input:
 		get_viewport().set_input_as_handled()
 
@@ -253,6 +253,7 @@ func _set_transition_data(data : eh_TransitionData) -> void:
 func _raise_multiple_transition_error() -> void:
 	# If you're in Debug or this is intended, press F12 or the continue 
 	# button in the debugger to continue
-	assert(false, "A new transition is being called while another one is playing")
+	breakpoint
+	push_error("A new transition is being called while another one is playing")
 
 ### -----------------------------------------------------------------------------------------------
