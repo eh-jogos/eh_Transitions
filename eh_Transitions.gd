@@ -45,6 +45,7 @@ var is_on_mid_point: = false
 
 #--- private variables - order: export > normal var > onready -------------------------------------
 
+@onready var _mask_viewport: SubViewport = $ResolutionFixedMask/MaskViewport
 @onready var _color_panel: ColorRect = $Transitions
 @onready var _animator: AnimationPlayer = $Transitions/AnimationPlayer
 @onready var _shader: ShaderMaterial = _color_panel.material
@@ -246,6 +247,12 @@ func _set_transition_data(data : eh_TransitionData) -> void:
 		await ready
 	
 	if _shader != null and transition_data != null:
+		if _shader.get_shader_parameter("mask") == null:
+			var viewport_texture := _mask_viewport.get_texture()
+			_shader.set_shader_parameter("mask", viewport_texture)
+			print("HACK TO RESCUE VIEWPORT TEXTURE ON RELEASE: %s"%[
+					_shader.get_shader_parameter("mask")
+			])
 		_shader.set_shader_parameter("smooth_size", transition_data.smooth_size)
 		_mask.texture = data.mask
 
