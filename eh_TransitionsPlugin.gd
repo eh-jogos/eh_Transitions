@@ -33,6 +33,8 @@ func _enter_tree() -> void:
 		"hint_string": "",
 	})
 	
+	project_settings_changed.connect(_on_project_settings_changed)
+	
 	if Engine.is_editor_hint():
 		ProjectSettings.save()
 		project_settings_changed.emit()
