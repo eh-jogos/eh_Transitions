@@ -45,6 +45,7 @@ var is_on_mid_point: = false
 
 #--- private variables - order: export > normal var > onready -------------------------------------
 
+@onready var _mask_viewport: SubViewport = $ResolutionFixedMask/MaskViewport
 @onready var _color_panel: ColorRect = $Transitions
 @onready var _animator: AnimationPlayer = $Transitions/AnimationPlayer
 @onready var _shader: ShaderMaterial = _color_panel.material
@@ -60,11 +61,10 @@ func _ready():
 	set_process_unhandled_input(false)
 	
 	if get_tree().current_scene == self:
-		print(get_tree().current_scene.name)
 		set_process_unhandled_input(true)
 
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if should_block_all_input:
 		get_viewport().set_input_as_handled()
 
@@ -122,14 +122,19 @@ func play_fade_transition(color: Color = Color.BLACK, duration: float = 0.5) -> 
 
 
 func cut_to_color(color := Color.BLACK) -> void:
+	transition_started.emit()
 	_color_panel.color = color
 	_animator.play("cut_to_color")
+	is_on_mid_point = true
 	await _animator.animation_finished
+	transition_mid_point_reached.emit()
 
 
 func cut_from_color() -> void:
+	is_on_mid_point = false
 	_animator.play("cut_from_color")
 	await _animator.animation_finished
+	transition_finished.emit()
 
 
 func is_transitioning_in() -> bool:
@@ -242,6 +247,12 @@ func _set_transition_data(data : eh_TransitionData) -> void:
 		await ready
 	
 	if _shader != null and transition_data != null:
+		if _shader.get_shader_parameter("mask") == null:
+			var viewport_texture := _mask_viewport.get_texture()
+			_shader.set_shader_parameter("mask", viewport_texture)
+			print("HACK TO RESCUE VIEWPORT TEXTURE ON RELEASE: %s"%[
+					_shader.get_shader_parameter("mask")
+			])
 		_shader.set_shader_parameter("smooth_size", transition_data.smooth_size)
 		_mask.texture = data.mask
 
@@ -249,6 +260,7 @@ func _set_transition_data(data : eh_TransitionData) -> void:
 func _raise_multiple_transition_error() -> void:
 	# If you're in Debug or this is intended, press F12 or the continue 
 	# button in the debugger to continue
-	assert(false, "A new transition is being called while another one is playing")
+	breakpoint
+	push_error("A new transition is being called while another one is playing")
 
 ### -----------------------------------------------------------------------------------------------
